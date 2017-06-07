@@ -11,3 +11,8 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+  sonar:
+    build: sonar/.
+    ports:
+      - "9000:9000"
+      - "9092:9092"
