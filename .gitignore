@@ -26,3 +26,9 @@ hs_err_pid*
 *.iws
 *.iml
 *.ipr
+
+# Maven
+target/
+.mvn/
+mvnw
+mvnw.cmd
