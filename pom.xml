@@ -61,7 +61,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<outputDirectory>${basedir}/docker/app</outputDirectory>
+					<outputDirectory>${basedir}/docker/gamesapp_dev_env/app</outputDirectory>
 					<finalName>app-games</finalName>
 				</configuration>
 			</plugin>
