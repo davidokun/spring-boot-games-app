@@ -42,7 +42,7 @@
       <injectBuildVariables>false</injectBuildVariables>
     </hudson.tasks.Maven>
     <hudson.tasks.Maven>
-      <targets>sonar:sonar -DsonarHost=sonar</targets>
+      <targets>clean install test sonar:sonar -DsonarHost=sonar</targets>
       <usePrivateRepository>false</usePrivateRepository>
       <settings class="jenkins.mvn.DefaultSettingsProvider"/>
       <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
