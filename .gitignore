@@ -45,6 +45,8 @@ docker/gamesapp_ci_env/jenkins/data/secrets
 docker/gamesapp_ci_env/jenkins/data/updates
 docker/gamesapp_ci_env/jenkins/data/userContent
 docker/gamesapp_ci_env/jenkins/data/war
+docker/gamesapp_ci_env/jenkins/data/.owner
+docker/gamesapp_ci_env/jenkins/data/queue.xml.bak
 docker/gamesapp_ci_env/jenkins/data/jobs/spring-boot-games-app/builds
 docker/gamesapp_ci_env/jenkins/data/jobs/spring-boot-games-app/lastStable
 docker/gamesapp_ci_env/jenkins/data/jobs/spring-boot-games-app/lastSuccessful
