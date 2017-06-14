@@ -10,9 +10,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +36,8 @@ public class GameServiceImplTest {
     @Mock
     private GameRepository gameRepository;
 
-    private Game game;
-
-    private String gameJson1 = "{\"code\":\"tloz\",\"name\":\"The Legend of Zeld : Breath of the Wild\",\"description\":\"The Legend of Zelda: Breath of the Wild es el título oficial del videojuego de acción-aventura de la serie The Legend of Zelda, desarrollado por Nintendo EPD (división de Nintendo creada por la unión de Nintendo EAD, Nintendo Software Planning & Development), en colaboración con Monolith Soft para Wii U y Nintendo Switch. Es la décimo octava entrega de la serie y la tercera en utilizar gráficos en alta definición (la primera fue The Legend of Zelda: The Wind Waker HD y la segunda es The Legend of Zelda: Twilight Princess HD). Se lanzó el 3 de marzo de 2017 para Wii U y Nintendo Switch.\",\"rating\":\"10\",\"likes\":\"0\",\"imageUrl\":\"http://cdn3-www.comingsoon.net/assets/uploads/2016/06/zeldaheader2.jpg\",\"reviews\":[{\"author\":\"davidokun\",\"comment\":\"Yes, it's great!\",\"date\":\"2017-06-08\"},{\"author\":\"johana\",\"comment\":\"Cool game, 5 stars\",\"date\":\"2017-06-05\"}],\"comments\":[{\"author\":\"davidokun\",\"comment\":\"Yes, it's great!\",\"date\":\"2017-06-08\"},{\"author\":\"johana\",\"comment\":\"Cool game, 5 stars\",\"date\":\"2017-06-05\"}]}";
-    private String gameJson2 = "{\"code\":\"mm\",\"name\":\"Mega Man\",\"description\":\"The Legend of Zelda: Breath of the Wild es el título oficial del videojuego de acción-aventura de la serie The Legend of Zelda, desarrollado por Nintendo EPD (división de Nintendo creada por la unión de Nintendo EAD, Nintendo Software Planning & Development), en colaboración con Monolith Soft para Wii U y Nintendo Switch. Es la décimo octava entrega de la serie y la tercera en utilizar gráficos en alta definición (la primera fue The Legend of Zelda: The Wind Waker HD y la segunda es The Legend of Zelda: Twilight Princess HD). Se lanzó el 3 de marzo de 2017 para Wii U y Nintendo Switch.\",\"rating\":\"10\",\"likes\":\"0\",\"imageUrl\":\"http://cdn3-www.comingsoon.net/assets/uploads/2016/06/zeldaheader2.jpg\",\"reviews\":[{\"author\":\"davidokun\",\"comment\":\"Yes, it's great!\",\"date\":\"2017-06-08\"},{\"author\":\"johana\",\"comment\":\"Cool game, 5 stars\",\"date\":\"2017-06-05\"}],\"comments\":[{\"author\":\"davidokun\",\"comment\":\"Yes, it's great!\",\"date\":\"2017-06-08\"},{\"author\":\"johana\",\"comment\":\"Cool game, 5 stars\",\"date\":\"2017-06-05\"}]}";
-    private String gameJson3 = "{\"code\":\"sf\",\"name\":\"Street Fighter\",\"description\":\"The Legend of Zelda: Breath of the Wild es el título oficial del videojuego de acción-aventura de la serie The Legend of Zelda, desarrollado por Nintendo EPD (división de Nintendo creada por la unión de Nintendo EAD, Nintendo Software Planning & Development), en colaboración con Monolith Soft para Wii U y Nintendo Switch. Es la décimo octava entrega de la serie y la tercera en utilizar gráficos en alta definición (la primera fue The Legend of Zelda: The Wind Waker HD y la segunda es The Legend of Zelda: Twilight Princess HD). Se lanzó el 3 de marzo de 2017 para Wii U y Nintendo Switch.\",\"rating\":\"10\",\"likes\":\"0\",\"imageUrl\":\"http://cdn3-www.comingsoon.net/assets/uploads/2016/06/zeldaheader2.jpg\",\"reviews\":[{\"author\":\"davidokun\",\"comment\":\"Yes, it's great!\",\"date\":\"2017-06-08\"},{\"author\":\"johana\",\"comment\":\"Cool game, 5 stars\",\"date\":\"2017-06-05\"}],\"comments\":[{\"author\":\"davidokun\",\"comment\":\"Yes, it's great!\",\"date\":\"2017-06-08\"},{\"author\":\"johana\",\"comment\":\"Cool game, 5 stars\",\"date\":\"2017-06-05\"}]}";
+    @Value("classpath:games.txt")
+    private Resource gamesJsonFile;
 
     private List<Game> gamesJson;
 
@@ -46,24 +47,25 @@ public class GameServiceImplTest {
         MockitoAnnotations.initMocks(this);
 
         ObjectMapper om = new ObjectMapper();
-        game = om.readValue(gameJson1, Game.class);
-
         gamesJson = new ArrayList<>();
-        gamesJson.add(om.readValue(gameJson1, Game.class));
-        gamesJson.add(om.readValue(gameJson2, Game.class));
-        gamesJson.add(om.readValue(gameJson3, Game.class));
 
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(gamesJsonFile.getInputStream()))){
+            String line;
+            while ((line = br.readLine()) != null){
+                gamesJson.add(om.readValue(line, Game.class));
+            }
+        }
 
     }
 
     @Test
     public void shouldReturnGameCreated(){
-        when(gameRepository.save(game)).thenReturn(game);
-        Game newGame = gameService.createGame(game);
+        when(gameRepository.save(gamesJson.get(0))).thenReturn(gamesJson.get(0));
+        Game newGame = gameService.createGame(gamesJson.get(0));
 
-        assertNotNull(game);
-        assertEquals(game.getCode(), newGame.getCode());
-        assertEquals(game.getRating(), newGame.getRating());
+        assertNotNull(newGame);
+        assertEquals("tloz", newGame.getCode());
+        assertEquals("10", newGame.getRating());
 
     }
 
@@ -77,6 +79,7 @@ public class GameServiceImplTest {
         assertEquals(3, gamesResponse.getResults().intValue());
         assertEquals("Mega Man", gamesResponse.getGames().get(1).getName());
         assertEquals("sf", gamesResponse.getGames().get(2).getCode());
+        assertEquals("mm", gamesResponse.getGames().get(1).getCode());
     }
 
 }
