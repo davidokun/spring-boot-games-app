@@ -23,6 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<sonar.jacoco.reportPaths>target/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
+		<sonarHost></sonarHost>
 		<sonar.exclusions>
 			src/main/java/com/singletonapps/model/*.java,
 			src/main/java/com/singletonapps/*.java,
