@@ -1,11 +1,12 @@
 package com.singletonapps.exceptions;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -17,8 +18,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Value("${games.app.serviceUnavailable}")
-    private String serviceUnavailableMessage;
+    @Autowired
+    private ExceptionMessage exceptionMessage;
 
 
     @ExceptionHandler(value = { DataAccessResourceFailureException.class })
@@ -27,9 +28,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        final String bodyOfResponse = String.format(serviceUnavailableMessage, request.getContextPath());
+        String bodyOfResponse = String.format(exceptionMessage.getServiceUnavailableMessage(), request.getContextPath());
 
         return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.SERVICE_UNAVAILABLE),
                 headers, HttpStatus.SERVICE_UNAVAILABLE, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String bodyOfResponse = String.format(exceptionMessage.getBadRequest(), request.getContextPath());
+
+        return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.BAD_REQUEST),
+                headers, HttpStatus.BAD_REQUEST, request);
     }
 }
