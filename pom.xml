@@ -27,7 +27,7 @@
 		<sonar.exclusions>
 			src/main/java/com/singletonapps/model/*.java,
 			src/main/java/com/singletonapps/*.java,
-			src/main/java/com/singletonapps/exceptions/*.java
+			src/main/java/com/singletonapps/exceptions/ExceptionMessage.java
 		</sonar.exclusions>
 	</properties>
 
