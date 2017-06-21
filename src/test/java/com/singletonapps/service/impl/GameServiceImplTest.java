@@ -82,4 +82,16 @@ public class GameServiceImplTest {
         assertEquals("mm", gamesResponse.getGames().get(1).getCode());
     }
 
+    @Test
+    public void shouldReturnGameUpdated(){
+        when(gameRepository.save(gamesJson.get(0))).thenReturn(gamesJson.get(0));
+        Game updatedGame = gameService.updateGame(gamesJson.get(0).getId(), gamesJson.get(0));
+
+        assertNotNull(updatedGame);
+        assertEquals("tloz", updatedGame.getCode());
+        assertEquals("10", updatedGame.getRating());
+        assertEquals("5940870d63351522a0d191bb", updatedGame.getId());
+
+    }
+
 }

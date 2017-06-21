@@ -2,6 +2,7 @@ package com.singletonapps.exceptions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.data.mongodb.UncategorizedMongoDbException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +23,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     private ExceptionMessage exceptionMessage;
 
 
-    @ExceptionHandler(value = { DataAccessResourceFailureException.class })
+    @ExceptionHandler(value = { DataAccessResourceFailureException.class, UncategorizedMongoDbException.class })
     protected ResponseEntity<Object> handleServiceUnavailable(RuntimeException ex, WebRequest request) {
 
         HttpHeaders headers = new HttpHeaders();

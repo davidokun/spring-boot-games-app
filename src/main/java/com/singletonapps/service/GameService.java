@@ -11,4 +11,6 @@ public interface GameService {
     Game createGame(Game game);
 
     GamesResponse getAllGames();
+
+    Game updateGame(String id, Game game);
 }

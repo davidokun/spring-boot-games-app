@@ -96,4 +96,16 @@ public class GamesControllerTest {
 
     }
 
+    @Test
+    public void shouldReturnGameUpdatedAndCode200(){
+        when(gameService.updateGame(gamesJson.get(0).getId(), gamesJson.get(0))).thenReturn(gamesJson.get(0));
+
+        ResponseEntity newResponseEntity = gamesController.updateGame(gamesJson.get(0).getId(),gamesJson.get(0));
+
+        assertNotNull(newResponseEntity);
+        assertEquals(HttpStatus.OK, newResponseEntity.getStatusCode());
+        assertEquals("tloz", ((Game)newResponseEntity.getBody()).getCode());
+        assertEquals("10", ((Game)newResponseEntity.getBody()).getRating());
+    }
+
 }
