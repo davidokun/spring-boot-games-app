@@ -35,4 +35,12 @@ public class GameServiceImpl implements GameService {
         return response;
 
     }
+
+    @Override
+    public Game updateGame(String id, Game game) {
+
+        game.setId(id);
+        return gameRepository.save(game);
+
+    }
 }

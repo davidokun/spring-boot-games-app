@@ -70,14 +70,6 @@ public class Game {
         this.imageUrl = imageUrl;
     }
 
-    public List<Review> getComments() {
-        return reviews;
-    }
-
-    public void setComments(List<Review> comments) {
-        this.reviews = comments;
-    }
-
     public String getCode() {
         return code;
     }
