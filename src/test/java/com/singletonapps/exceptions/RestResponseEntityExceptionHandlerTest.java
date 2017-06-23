@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -37,6 +38,9 @@ public class RestResponseEntityExceptionHandlerTest {
     private HttpMessageNotReadableException httpMessageNotReadableException;
 
     @Mock
+    private NoHandlerFoundException noHandlerFoundException;
+
+    @Mock
     private HttpHeaders headers;
 
     @Mock
@@ -47,6 +51,9 @@ public class RestResponseEntityExceptionHandlerTest {
 
     @Value("${games.app.badRequest}")
     private String badRequest;
+
+    @Value("${games.app.notFound}")
+    private String notFound;
 
     @Before
     public void setUp(){
@@ -77,6 +84,20 @@ public class RestResponseEntityExceptionHandlerTest {
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+    }
+
+    @Test
+    public void shouldReturnNotFoundWithCode404(){
+
+        when(request.getContextPath()).thenReturn("v1/games");
+        when(exceptionMessage.getNotFound()).thenReturn(notFound);
+
+        ResponseEntity<Object> response = exceptionHandler
+                .handleNoHandlerFoundException(noHandlerFoundException, headers, HttpStatus.NOT_FOUND, request);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
     }
 }

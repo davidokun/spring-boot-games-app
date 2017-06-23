@@ -15,6 +15,9 @@ class ExceptionMessage {
     @Value("${games.app.badRequest}")
     private String badRequest;
 
+    @Value("${games.app.notFound}")
+    private String notFound;
+
     String getServiceUnavailableMessage() {
         return serviceUnavailableMessage;
     }
@@ -23,4 +26,7 @@ class ExceptionMessage {
         return badRequest;
     }
 
+    public String getNotFound() {
+        return notFound;
+    }
 }
