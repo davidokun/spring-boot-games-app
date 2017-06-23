@@ -11,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -44,5 +45,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.BAD_REQUEST),
                 headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String bodyOfResponse = String.format(exceptionMessage.getNotFound(), request.getContextPath());
+
+        return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.NOT_FOUND),
+                headers, HttpStatus.NOT_FOUND, request);
     }
 }
