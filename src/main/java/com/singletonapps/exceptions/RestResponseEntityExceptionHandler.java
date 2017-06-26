@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -31,8 +30,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String bodyOfResponse = String.format(exceptionMessage.getServiceUnavailableMessage(),
-                ((ServletWebRequest) request).getRequest().getServletPath());
+        String bodyOfResponse = exceptionMessage.getServiceUnavailableMessage();
 
         return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.SERVICE_UNAVAILABLE),
                 headers, HttpStatus.SERVICE_UNAVAILABLE, request);
@@ -43,8 +41,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String bodyOfResponse = String.format(exceptionMessage.getBadRequest(),
-                ((ServletWebRequest) request).getRequest().getServletPath());
+        String bodyOfResponse = exceptionMessage.getBadRequest();
 
         return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.BAD_REQUEST),
                 headers, HttpStatus.BAD_REQUEST, request);
@@ -55,8 +52,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String bodyOfResponse = String.format(exceptionMessage.getNotFound(),
-                ((ServletWebRequest) request).getRequest().getServletPath());
+        String bodyOfResponse = exceptionMessage.getNotFound();
 
         return handleExceptionInternal(ex, String.format(bodyOfResponse, HttpStatus.NOT_FOUND),
                 headers, HttpStatus.NOT_FOUND, request);
